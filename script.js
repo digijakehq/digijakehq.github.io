@@ -105,18 +105,34 @@ if (lightbox && items.length) {
 
   let currentIndex = 0;
 
-  function openLightbox(index) {
-    currentIndex = index;
-    lightbox.classList.add("active");
-    renderMedia();
-  }
+function openLightbox(index) {
+  currentIndex = index;
+
+  /* 🔒 LOCK SCROLL — iOS SAFARI FIX */
+  document.body.style.position = "fixed";
+  document.body.style.width = "100%";
+  mainSection.style.overflow = "hidden";
+
+  lightbox.classList.add("active");
+  renderMedia();
+}
 
 function closeLightbox() {
   const video = content.querySelector("video");
   if (video) video.pause();
+
+  /* 🔓 RESTORE SCROLL */
+  document.body.style.position = "";
+  document.body.style.width = "";
+  mainSection.style.overflow = "";
+
   lightbox.classList.remove("active");
   content.innerHTML = "";
 }
+
+lightbox.addEventListener("touchend", e => {
+  if (e.target === lightbox) closeLightbox();
+});
 
   function renderMedia() {
     content.innerHTML = "";
@@ -255,7 +271,9 @@ function closeLightbox() {
 
   document.addEventListener("keydown", e => {
     if (!lightbox.classList.contains("active")) return;
-    if (e.key === "Escape") closeLightbox();
+    if (e.key === "Escape" && lightbox.classList.contains("active")) {
+    closeLightbox();
+    } 
     if (e.key === "ArrowRight") next();
     if (e.key === "ArrowLeft") prev();
   });
