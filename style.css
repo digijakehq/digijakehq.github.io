@@ -150,6 +150,14 @@ nav a {
   gap: 15px;
 }
 
+.hero-img video {
+  width: 140%;
+  height: 140%;
+  object-fit: cover;
+  position: absolute;
+  mix-blend-mode: lighten;
+}
+
 .hero-home {
   flex-direction: row;
   justify-content: space-between;
